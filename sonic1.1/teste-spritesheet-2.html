@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Personagem controlável e animado com Parallax</title>
+   <script src="spritesheet.js"></script> 
+   <script src="animacao.js"></script> 
+   <script src="teclado.js"></script> 
+   <script src="fundo.js"></script>
+   <script src="sonic.js"></script>
+   <style>
+      body {
+         margin: 0;
+         padding: 20px;
+         background: #1a1a1a;
+         color: white;
+         font-family: Arial, sans-serif;
+         text-align: center;
+      }
+      canvas {
+         border: 1px solid #f700ff;
+         border-radius: 8px;
+         background: #000;
+      }
+      .info {
+         background: rgba(255,255,255,0.1);
+         padding: 10px;
+         border-radius: 5px;
+         margin: 10px 0;
+         max-width: 500px;
+         margin-left: auto;
+         margin-right: auto;
+      }
+   </style>
+</head>
+
+<body>
+   <canvas id="canvas_sonic" width="1000" height="500"></canvas>
+   <script>
+      var canvas = document.getElementById('canvas_sonic');
+      var context = canvas.getContext('2d');
+
+      var teclado = new Teclado(document); 
+      var animacao = new Animacao(context); 
+      var gerenciadorFundos = new GerenciadorFundos(context);
+
+      var imgSonic = new Image(); 
+      imgSonic.src = 'spritesheet.png'; 
+
+      var imagemEspaco = new Image();
+      var imagemEstrelas = new Image();
+      var imagemNuvens = new Image();
+
+      imagemEspaco.src = 'fundo-espaco.png';
+      imagemEstrelas.src = 'fundo-estrelas.png';
+      imagemNuvens.src = 'fundo-nuvens.png';
+
+      var imagensCarregadas = 0;
+      var totalImagens = 4;
+
+      function imagemCarregou() {
+         imagensCarregadas++;
+         if (imagensCarregadas === totalImagens) {
+            configurarJogo();
+         }
+      }
+
+      function configurarJogo() {
+         gerenciadorFundos.adicionarCamada(imagemEspaco, 2, 0.2);
+         gerenciadorFundos.adicionarCamada(imagemEstrelas, 2, 0.5);
+         gerenciadorFundos.adicionarCamada(imagemNuvens, 2, 1.0);
+
+         var sonic = new Sonic(context, teclado, imgSonic);
+         sonic.x = 175; 
+         sonic.y = 400; 
+         animacao.novoSprite(sonic);
+
+         animacao.ligar();
+      }
+
+      imgSonic.onload = imagemCarregou;
+      imagemEspaco.onload = imagemCarregou;
+      imagemEstrelas.onload = imagemCarregou;
+      imagemNuvens.onload = imagemCarregou;
+   </script>
+</body>
+
+</html>
